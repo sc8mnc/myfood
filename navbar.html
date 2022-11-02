@@ -1,0 +1,107 @@
+<!-- Site Navbar -->
+<header>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <!-- Left side -->
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">My Recipes</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Add Recipe</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Search</a>
+            </li>
+            </ul>
+        </div>
+        <!-- Right side -->
+        <div class="d-flex align-items-center navbar-right">
+            <!-- Profile -->
+            <div class="dropdown">
+            <a
+                class="dropdown-toggle d-flex align-items-center hidden-arrow"
+                href="#"
+                id="navbarDropdownMenuAvatar"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+                >
+                <!-- Icon edited from https://www.flaticon.com/free-icon/user_1946429 -->
+                <img
+                src="images/usericon.png"
+                class="rounded-circle"
+                height="38"
+                alt="User icon"
+                loading="lazy"
+                />
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuAvatar">
+                <li>
+                    <a class="dropdown-item" href="#">Favorite Recipes</a>
+                </li>
+                <li><hr class="dropdown-divider"></li>
+                <li>
+                    <a class="dropdown-item" href="#">Settings</a>
+                </li>
+                <li><hr class="dropdown-divider"></li>
+                <li>
+                    <a class="dropdown-item" href="#">Log Out</a>
+                </li>
+            </ul>
+            </div>
+        </div>
+        </div>
+    </nav>
+</header>
+
+<style>
+    .navbar {
+        background-color: #00c063;
+        color: white;
+        padding-top: 12px;
+        padding-bottom: 12px;
+    }
+
+    .navbar .nav-item .nav-link {
+        font-weight: bold;
+        color: rgba(255, 255, 255, 0.849);
+        /* Add spacing around navbar items */
+        padding-left: 30px;
+        padding-right: 30px;
+        font-size: 16px;
+    }
+
+    .navbar .nav-item .nav-link:hover {
+        color: rgba(255, 255, 255, 0.966);
+    }
+
+    /* Add border between navbar items */
+    .navbar .nav-item:not(:last-child) .nav-link {
+        border-right: 2px solid white;
+    }
+
+    .navbar-right {
+        padding-right: 15px;
+    }
+
+    .navbar-right .dropdown-menu {
+        /* Change dropdown menu color */
+        background-color: #0cd674;
+    }
+
+    .navbar-right .dropdown-menu .dropdown-item {
+        color: white;
+        font-weight: bold;
+        padding: 10px;
+        padding-right: 20px;
+        padding-left: 20px;
+    }
+</style>
