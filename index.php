@@ -68,8 +68,8 @@
 
     <!-- Buttons below intro -->
     <div class="button-group d-flex justify-content-center" style="padding-top: 30px;">
-        <a class="groupbtn btn btn-primary" href="#" role="button">Create Account</a>
-        <a class="groupbtn btn btn-primary" href="#" role="button">Login</a>
+        <a class="groupbtn btn btn-primary" href="register.php" role="button">Create Account</a>
+        <a class="groupbtn btn btn-primary" href="login.php" role="button">Login</a>
     </div>
 
 
