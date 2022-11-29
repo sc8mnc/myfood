@@ -66,13 +66,6 @@
         z-index: 2;
     }
     
-    .form-group input[type="email"] {
-        margin-bottom: -1px;
-        border-bottom-right-radius: 0;
-        border-bottom-left-radius: 0;
-        border-color:#017572;
-    }
-    
     .form-group input[type="password"] {
         margin-bottom: 10px;
         border-top-left-radius: 0;
@@ -102,7 +95,7 @@
 require_once "connect-db.php";
  
 // Define variables and initialize with empty values
-$firstname = $lastname = $email = $username = $password = $confirm_password = "";
+$firstname = $lastname = $username = $password = $confirm_password = "";
 $username_err = $password_err = $confirm_password_err = "";
  
 // Processing form data when form is submitted
@@ -120,13 +113,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         $lastname_err = "Please enter your last name.";
     } else{
         $lastname = trim($_POST["lastname"]);
-    }
-
-    // Validate email
-    if(empty(trim($_POST["email"]))){
-        $email_err = "Please enter your email.";
-    } else{
-        $email = trim($_POST["email"]);
     }
 
     // Validate username
@@ -185,20 +171,19 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     }
     
     // Check input errors before inserting in database
-    if(empty($firstname_err) && empty($lastname_err) && empty($email_err) && empty($username_err) && empty($password_err) && empty($confirm_password_err)){
+    if(empty($firstname_err) && empty($lastname_err) && empty($username_err) && empty($password_err) && empty($confirm_password_err)){
         // Prepare an insert statement
-        $sql = "INSERT INTO user (first_name, last_name, username, password, email) VALUES (?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO user (first_name, last_name, username, password) VALUES (?, ?, ?, ?)";
          
         if($stmt = mysqli_prepare($db, $sql)){
             // Bind variables to the prepared statement as parameters
-            mysqli_stmt_bind_param($stmt, "sssss", $param_firstname, $param_lastname, $param_username, $param_password, $param_email);
+            mysqli_stmt_bind_param($stmt, "ssss", $param_firstname, $param_lastname, $param_username, $param_password);
             
             // Set parameters
             $param_firstname = $firstname;
             $param_lastname = $lastname;
             $param_username = $username;
             $param_password = password_hash($password, PASSWORD_DEFAULT); // Creates a password hash
-            $param_email = $email;
             
             // Attempt to execute the prepared statement
             if(mysqli_stmt_execute($stmt)){
@@ -242,12 +227,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 <label>Last Name</label>
                 <input type="text" name="lastname" class="form-control <?php echo (!empty($lastname_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $lastname; ?>">
                 <span class="invalid-feedback"><?php echo $lastname_err; ?></span>
-            </div>    
-            <div class="form-group">
-                <label>Email</label>
-                <input type="email" name="email" class="form-control <?php echo (!empty($email_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $email; ?>">
-                <span class="invalid-feedback"><?php echo $email_err; ?></span>
-            </div>    
+            </div>     
             <div class="form-group">
                 <label>Username</label>
                 <input type="text" name="username" class="form-control <?php echo (!empty($username_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $username; ?>">
