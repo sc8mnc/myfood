@@ -4,9 +4,10 @@
   <meta charset="UTF-8">  
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="author" content="Very Cool Group">
-  <meta name="description" content="The MyFood site landing page">      
-  <title>MyFood - Landing</title>
+  <meta name="description" content="A MyFood recipe detail page">      
+  <title>MyFood - View Recipe</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+  <link rel=”stylesheet” href=”https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css” />
   <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
   <!-- Icon from https://www.clipsafari.com/clips/o237408-sprouting-green-leaves -->
   <link rel="icon" type="image/png" href="images/siteicon.png" />
@@ -23,7 +24,7 @@
 
     .cardimg {
         width: 100%;
-        height: 40vh;
+        height: 45vh;
         object-fit: cover;
     }
 
@@ -33,24 +34,44 @@
         padding: 12px;
         width: 12em;
     }
+
+    .recipename {
+        margin-left: 31%;
+    }
+
+    .favorite {
+        position: absolute;
+        right: 1%;
+    }
     </style>
 </head>
 
 <body>
 
     <div class="fixed-top">
-        <?php include('site_heading.html') ?> 
+        <?php include('site_heading.html') ?>
+        <?php include('navbar.html') ?>
     </div>
 
-    <div style="padding-top:205px;">
+    <div style="padding-top:208px;">
 
     </div>
 
-    <!-- Site introduction -->
+    <!-- Recipe details -->
     <div class="row d-flex justify-content-center align-items-center">
+        <div class="row recipename">
+            <h2 style="font-weight:bold;">Recipe 1</h2>
+        </div>
         <div class="card mb-3 p-0">
             <div class="row">
+                <div class="col-md-5 p-0">
+                    <!-- Image from https://www.pexels.com/photo/pasta-with-vegetable-dish-on-gray-plate-beside-tomato-fruit-on-white-table-769969/ -->
+                    <img src="images/spaghetti.jpg" class="cardimg img-fluid rounded-start" alt="Picture of spaghetti">
+                </div>
                 <div class="body col-md-7">
+                    <div class="favorite">
+                        Star
+                    </div>
                     <div class="card-body">
                         <h2 class="card-title" style="font-weight:bold;">Welcome to MyFood.</h5>
                         <p class="card-text" style="font-size:22px;">
@@ -58,21 +79,9 @@
                         </p>
                     </div>
                 </div>
-                <div class="col-md-5 p-0">
-                    <!-- Image from https://www.pexels.com/photo/pasta-with-vegetable-dish-on-gray-plate-beside-tomato-fruit-on-white-table-769969/ -->
-                    <img src="images/spaghetti.jpg" class="cardimg img-fluid rounded-start" alt="Picture of spaghetti">
-                </div>
             </div>
         </div>
     </div>
-
-    <!-- Buttons below intro -->
-    <div class="button-group d-flex justify-content-center" style="padding-top: 30px;">
-        <a class="groupbtn btn btn-primary" href="#" role="button">Create Account</a>
-        <a class="groupbtn btn btn-primary" href="#" role="button">Login</a>
-    </div>
-
-
 
     <?php include('footer.html') ?> 
 
