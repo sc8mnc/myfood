@@ -7,24 +7,12 @@ require("connect-db.php");
   <meta charset="UTF-8">  
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="author" content="Very Cool Group">
-  <meta name="description" content="The MyFood site landing page">      
-  <title>MyFood - Landing</title>
+  <meta name="description" content="The MyFood site login page">      
+  <title>MyFood - Login</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
   <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
   <!-- Icon from https://www.clipsafari.com/clips/o237408-sprouting-green-leaves -->
   <link rel="icon" type="image/png" href="images/siteicon.png" />
-    
-</head>
-
-<body>
-
-    <div class="fixed-top">
-        <?php include('site_heading.html') ?> 
-    </div>
-
-    <div style="padding-top:205px;">
-
-    </div>
 
     <!-- Site introduction -->
     <!-- <?php ob_start();?> -->
@@ -67,16 +55,15 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     
     // Validate credentials
     if(empty($username_err) && empty($password_err)){
+
         // Prepare a select statement
-        $sql = "SELECT id, username, password FROM users WHERE username = ?";
-        
+        $sql = "SELECT user_id, username, password FROM user WHERE username = ?";
         if($stmt = mysqli_prepare($db, $sql)){
             // Bind variables to the prepared statement as parameters
             mysqli_stmt_bind_param($stmt, "s", $param_username);
-            
+
             // Set parameters
             $param_username = $username;
-            
             // Attempt to execute the prepared statement
             if(mysqli_stmt_execute($stmt)){
                 // Store result
@@ -86,6 +73,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 if(mysqli_stmt_num_rows($stmt) == 1){                    
                     // Bind result variables
                     mysqli_stmt_bind_result($stmt, $id, $username, $hashed_password);
+
+                    echo password_hash($password, PASSWORD_DEFAULT);
+
                     if(mysqli_stmt_fetch($stmt)){
                         if(password_verify($password, $hashed_password)){
                             // Password is correct, so start a new session
@@ -120,17 +110,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     mysqli_close($db);
 }
 ?>
- 
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Login</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
      <style>
          body {
-            padding-top: 40px;
-            padding-bottom: 40px;
             text-align:center;
          }
          
@@ -177,17 +159,38 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
          h2{
             text-align: center;
             color: #017572;
+            font-weight: bold;
+         }
+
+         .submit {
+            margin-top: 12px;
+            margin-bottom: 8px;
+            width: 35%;
+         }
+
+         .alert {
+            width: 55%;
          }
     </style>
 </head>
+
 <body>
+
+    <div class="fixed-top">
+        <?php include('site_heading.html') ?> 
+    </div>
+
+    <div style="padding-top:130px;">
+
+    </div>
+
     <div class="wrapper">
         <h2>Login</h2>
-        <p>Please fill in your credentials to login.</p>
+        <p>Please fill in your login credentials below.</p>
 
         <?php 
         if(!empty($login_err)){
-            echo '<div class="alert alert-danger">' . $login_err . '</div>';
+            echo '<div class="row justify-content-center"><div class="alert alert-danger">' . $login_err . '</div></div>';
         }        
         ?>
 
@@ -203,16 +206,12 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 <span class="invalid-feedback"><?php echo $password_err; ?></span>
             </div>
             <div class="form-group">
-                <input type="submit" class="btn btn-primary" value="Login">
+                <input type="submit" class="btn btn-primary submit" value="Login">
             </div>
             <p>Don't have an account? <a href="register.php">Sign up now</a>.</p>
         </form>
     </div>
-</body>
-</html>
   
-
-
 
     <?php include('footer.html') ?> 
 

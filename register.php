@@ -4,8 +4,8 @@
   <meta charset="UTF-8">  
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="author" content="Very Cool Group">
-  <meta name="description" content="The MyFood site landing page">      
-  <title>MyFood - Landing</title>
+  <meta name="description" content="The MyFood account registration page">      
+  <title>MyFood - Register</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
   <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
   <!-- Icon from https://www.clipsafari.com/clips/o237408-sprouting-green-leaves -->
@@ -33,29 +33,101 @@
         padding: 12px;
         width: 12em;
     }
+
+    body {
+        padding-top: 40px;
+        padding-bottom: 40px;
+        text-align:center;
+    }
+
+    .form-group {
+        max-width: 330px;
+        padding: 15px;
+        margin: 0 auto;
+        color: #017572;
+    }
+
+    
+    .form-group .checkbox {
+        font-weight: normal;
+    }
+    
+    .form-group .form-control {
+        position: relative;
+        height: auto;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        padding: 10px;
+        font-size: 16px;
+    }
+    
+    .form-group .form-control:focus {
+        z-index: 2;
+    }
+    
+    .form-group input[type="email"] {
+        margin-bottom: -1px;
+        border-bottom-right-radius: 0;
+        border-bottom-left-radius: 0;
+        border-color:#017572;
+    }
+    
+    .form-group input[type="password"] {
+        margin-bottom: 10px;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+        border-color:#017572;
+    }
+    
+    h2{
+        text-align: center;
+        color: #017572;
+        font-weight: bold;
+    }
+
+    .buttons .btn {
+        margin-left: 3%;
+        margin-right: 3%;
+    }
+
+    .submit {
+        width: 35%;
+    }
+
     </style>
-</head>
-
-<body>
-
-    <div class="fixed-top">
-        <?php include('site_heading.html') ?> 
-    </div>
-
-    <div style="padding-top:205px;">
-
-    </div>
 
     <?php
 // Include config file
 require_once "connect-db.php";
  
 // Define variables and initialize with empty values
-$username = $password = $confirm_password = "";
+$firstname = $lastname = $email = $username = $password = $confirm_password = "";
 $username_err = $password_err = $confirm_password_err = "";
  
 // Processing form data when form is submitted
 if($_SERVER["REQUEST_METHOD"] == "POST"){
+
+    // Validate first name
+    if(empty(trim($_POST["firstname"]))){
+        $firstname_err = "Please enter your first name.";
+    } else{
+        $firstname = trim($_POST["firstname"]);
+    }
+
+    // Validate last name
+    if(empty(trim($_POST["lastname"]))){
+        $lastname_err = "Please enter your last name.";
+    } else{
+        $lastname = trim($_POST["lastname"]);
+    }
+
+    // Validate email
+    if(empty(trim($_POST["email"]))){
+        $email_err = "Please enter your email.";
+    } else{
+        $email = trim($_POST["email"]);
+    }
 
     // Validate username
     if(empty(trim($_POST["username"]))){
@@ -64,7 +136,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         $username_err = "Username can only contain letters, numbers, and underscores.";
     } else{
         // Prepare a select statement
-        $sql = "SELECT id FROM users WHERE username = ?";
+        $sql = "SELECT user_id FROM user WHERE username = ?";
         
         if($stmt = mysqli_prepare($db, $sql)){
             // Bind variables to the prepared statement as parameters
@@ -94,6 +166,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     
     // Validate password
     if(empty(trim($_POST["password"]))){
+
         $password_err = "Please enter a password.";     
     } elseif(strlen(trim($_POST["password"])) < 6){
         $password_err = "Password must have atleast 6 characters.";
@@ -112,18 +185,20 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     }
     
     // Check input errors before inserting in database
-    if(empty($username_err) && empty($password_err) && empty($confirm_password_err)){
-        
+    if(empty($firstname_err) && empty($lastname_err) && empty($email_err) && empty($username_err) && empty($password_err) && empty($confirm_password_err)){
         // Prepare an insert statement
-        $sql = "INSERT INTO users (username, password) VALUES (?, ?)";
+        $sql = "INSERT INTO user (first_name, last_name, username, password, email) VALUES (?, ?, ?, ?, ?)";
          
         if($stmt = mysqli_prepare($db, $sql)){
             // Bind variables to the prepared statement as parameters
-            mysqli_stmt_bind_param($stmt, "ss", $param_username, $param_password);
+            mysqli_stmt_bind_param($stmt, "sssss", $param_firstname, $param_lastname, $param_username, $param_password, $param_email);
             
             // Set parameters
+            $param_firstname = $firstname;
+            $param_lastname = $lastname;
             $param_username = $username;
             $param_password = password_hash($password, PASSWORD_DEFAULT); // Creates a password hash
+            $param_email = $email;
             
             // Attempt to execute the prepared statement
             if(mysqli_stmt_execute($stmt)){
@@ -142,70 +217,37 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     mysqli_close($db);
 }
 ?>
- 
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Sign Up</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <style>
-         body {
-            padding-top: 40px;
-            padding-bottom: 40px;
-            text-align:center;
-         }
-        
-         .form-group {
-            max-width: 330px;
-            padding: 15px;
-            margin: 0 auto;
-            color: #017572;
-         }
-        
-         
-         .form-group .checkbox {
-            font-weight: normal;
-         }
-         
-         .form-group .form-control {
-            position: relative;
-            height: auto;
-            -webkit-box-sizing: border-box;
-            -moz-box-sizing: border-box;
-            box-sizing: border-box;
-            padding: 10px;
-            font-size: 16px;
-         }
-         
-         .form-group .form-control:focus {
-            z-index: 2;
-         }
-         
-         .form-group input[type="email"] {
-            margin-bottom: -1px;
-            border-bottom-right-radius: 0;
-            border-bottom-left-radius: 0;
-            border-color:#017572;
-         }
-         
-         .form-group input[type="password"] {
-            margin-bottom: 10px;
-            border-top-left-radius: 0;
-            border-top-right-radius: 0;
-            border-color:#017572;
-         }
-         
-         h2{
-            text-align: center;
-            color: #017572;
-         }
-    </style>
 </head>
+
 <body>
+
+    <div class="fixed-top">
+        <?php include('site_heading.html') ?> 
+    </div>
+
+    <div style="padding-top:88px;">
+
+    </div>
+
     <div class="wrapper">
         <h2>Sign Up</h2>
         <p>Please fill this form to create an account.</p>
         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+            <div class="form-group">
+                <label>First Name</label>
+                <input type="text" name="firstname" class="form-control <?php echo (!empty($firstname_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $firstname; ?>">
+                <span class="invalid-feedback"><?php echo $firstname_err; ?></span>
+            </div>    
+            <div class="form-group">
+                <label>Last Name</label>
+                <input type="text" name="lastname" class="form-control <?php echo (!empty($lastname_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $lastname; ?>">
+                <span class="invalid-feedback"><?php echo $lastname_err; ?></span>
+            </div>    
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" name="email" class="form-control <?php echo (!empty($email_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $email; ?>">
+                <span class="invalid-feedback"><?php echo $email_err; ?></span>
+            </div>    
             <div class="form-group">
                 <label>Username</label>
                 <input type="text" name="username" class="form-control <?php echo (!empty($username_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $username; ?>">
@@ -221,17 +263,13 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 <input type="password" name="confirm_password" class="form-control <?php echo (!empty($confirm_password_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $confirm_password; ?>">
                 <span class="invalid-feedback"><?php echo $confirm_password_err; ?></span>
             </div>
-            <div class="form-group">
-                <input type="submit" class="btn btn-primary" value="Submit">
+            <div class="form-group buttons">
                 <input type="reset" class="btn btn-secondary ml-2" value="Reset">
+                <input type="submit" class="btn btn-primary submit" value="Submit">
             </div>
             <p>Already have an account? <a href="login.php">Login here</a>.</p>
         </form>
     </div>    
-</body>
-</html>
-
-
 
     <?php include('footer.html') ?> 
 
