@@ -1,3 +1,23 @@
+
+<?php
+require("connect_db.php");      // include("connect-db.php");
+require("functions_db.php");
+
+// $list_of_friends = getAllFriends();
+// $friend_to_update = null;      
+?>
+
+<?php
+if ($_SERVER['REQUEST_METHOD'] == 'POST')
+{
+  if (!empty($_POST['btnAction']) && $_POST['btnAction'] =='Create account') 
+  {
+      createNewAccount($_POST['first_name'], $_POST['last_name'], $_POST['password']);
+      // $list_of_friends = getAllFriends();  
+  }
+}
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -46,31 +66,32 @@
 
     </div>
 
-    <!-- Site introduction -->
-    <div class="row d-flex justify-content-center align-items-center">
-        <div class="card mb-3 p-0">
-            <div class="row">
-                <div class="body col-md-7">
-                    <div class="card-body">
-                        <h2 class="card-title" style="font-weight:bold;">Welcome to MyFood.</h5>
-                        <p class="card-text" style="font-size:22px;">
-                            Upload and share delicious recipes with other users. Try new dishes today with MyFood!
-                        </p>
-                    </div>
-                </div>
-                <div class="col-md-5 p-0">
-                    <!-- Image from https://www.pexels.com/photo/pasta-with-vegetable-dish-on-gray-plate-beside-tomato-fruit-on-white-table-769969/ -->
-                    <img src="images/spaghetti.jpg" class="cardimg img-fluid rounded-start" alt="Picture of spaghetti">
-                </div>
-            </div>
-        </div>
-    </div>
+    <form name="mainForm" action="index.php" method="post">   
+    <div class="row mb-3 mx-3">
+        First name:
+        <input type="text" class="form-control" name="first_name" required 
+            value="<?php ?>"
+        />            
+    </div>  
+    <div class="row mb-3 mx-3">
+        Last name:
+        <input type="text" class="form-control" name="last_name" required 
+        value="<?php ?>"
+        />            
+    </div> 
+    <div class="row mb-3 mx-3">
+        Password:
+        <input type="text" class="form-control" name="password" required 
+        value="<?php ?>"
+        />            
+    </div>   
+    <!-- <div class="row mb-3 mx-3"> -->
+    <center> <div>         
+        <input type="submit" value="Create account" name="btnAction" class="btn btn-primary" 
+            title="Create new account" />            
+    </div>  </center>
 
-    <!-- Buttons below intro -->
-    <div class="button-group d-flex justify-content-center" style="padding-top: 30px;">
-        <a class="groupbtn btn btn-primary" href="create_account.php" role="button">Create Account</a>
-        <a class="groupbtn btn btn-primary" href="#" role="button">Login</a>
-    </div>
+    </form> 
 
 
 
