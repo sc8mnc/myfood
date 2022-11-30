@@ -21,10 +21,25 @@ SET time_zone = "+00:00";
 -- Database: `myfood`
 --
 
+DROP PROCEDURE IF EXISTS getAllRecipesBasicInfo;
+DROP PROCEDURE IF EXISTS getAllRecipesBasicInfoFromId;
+DROP TABLE iF EXISTS myfood.board_message;
+DROP TABLE iF EXISTS myfood.board_pictures;
+DROP TABLE iF EXISTS myfood.comments;
+DROP TABLE iF EXISTS myfood.favorites;
+DROP TABLE iF EXISTS myfood.posts;
+DROP TABLE iF EXISTS myfood.recipe;
+DROP TABLE iF EXISTS myfood.recipe_pictures;
+DROP TABLE iF EXISTS myfood.recipe_tags;
+DROP TABLE iF EXISTS myfood.uploads;
+DROP TABLE iF EXISTS myfood.user;
+DROP TABLE iF EXISTS myfood.user_comments;
+
 DELIMITER $$
 --
 -- Procedures
 --
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getAllRecipesBasicInfo` ()  SELECT R.recipe_name, R.ingredients, P.picture
 FROM recipes R NATURAL JOIN recipe_pictures P
 WHERE R.recipe_id = P.recipe_id$$
