@@ -105,6 +105,7 @@ $recipename = $ingredients = $instructions = $cost = "";
 $recipename_err = $ingredients_err = $instructions_err = $cost_err = "";
 $quick_tag = $cheap_tag = $fancy_tag = $vegan_tag = $healthy_tag = false;
 $comfort_food_tag = $spicy_tag = $dessert_tag = $vegetarian_tag = false;
+$picture = "";
  
 // Processing form data when form is submitted
 if($_SERVER["REQUEST_METHOD"] == "POST"){
@@ -139,6 +140,16 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     } else{
         $cost = trim($_POST["cost"]);
     }
+
+    $quick_tag = $_POST["quick_tag"];
+    $cheap_tag = $_POST["cheap_tag"];
+    $fancy_tag = $_POST["fancy_tag"];
+    $vegan_tag = $_POST["vegan_tag"];
+    $healthy_tag = $_POST["healthy_tag"];
+    $comfort_food_tag = $_POST["comfort_food_tag"];
+    $spicy_tag = $_POST["spicy_tag"];
+    $dessert_tag = $_POST["dessert_tag"];
+    $vegetarian_tag = $_POST["vegetarian_tag"];
 
     // $next_recipe = mysqli_query($db, "SELECT * FROM `recipe` ORDER BY recipe_id DESC LIMIT 1");
     // foreach ($next_recipe as $next_recipe_indiv){
@@ -209,6 +220,31 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         }
     }
 
+    if ($picture != ""){
+        // Prepare an insert statement
+        $sql = "INSERT INTO recipe_pictures (recipe_id, picture) VALUES (?, ?)";
+         
+        if($stmt = mysqli_prepare($db, $sql)){
+            // Bind variables to the prepared statement as parameters
+            mysqli_stmt_bind_param($stmt, "ib", $param_recipe_id, $param_picture);
+            
+            // Set parameters
+            $param_recipe_id = $next_increment;
+            $param_tag = $picture;
+            
+            // Attempt to execute the prepared statement
+            if(mysqli_stmt_execute($stmt)){
+                // Redirect to login page
+                // header("location: landing.php");
+            } else{
+                echo "Oops! Something went wrong. Please try again later.";
+            }
+
+            // Close statement
+            mysqli_stmt_close($stmt);
+        }
+    }
+
     header("location: landing.php");
 
 
@@ -236,23 +272,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
     </div>
 
-    <script>
-        function quick_press() {
-            $quick_tag = !$quick_tag
-            echo "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
-
-        }
-
-        function unfavorite(icon, userid, recipeid) {
-            // Toggle star icon
-            icon.classList.toggle("bi-star-fill");
-            icon.classList.toggle("bi-star");
-            // AJAX request to remove favorite
-            var xmlhttp = new XMLHttpRequest();
-            xmlhttp.open("GET","getfav.php?userid="+userid+"&recipeid="+recipeid+"&fav=false", true);
-            xmlhttp.send();
-        }
-    </script>
 
     <div class="wrapper">
         <h2>Create your own recipe!</h2>
@@ -277,27 +296,47 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 <input type="number" step="0.01" name="cost" class="form-control <?php echo (!empty($cost_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $cost; ?>">
                 <span class="invalid-feedback"><?php echo $cost_err; ?></span>
             </div>
-            <div class="form-group buttons">
-                <!-- Favorite icon -->
-                <?php
-                    // Icon depends on favorited status
-                    if ($quick_tag) {
-                        echo "<input type='button' class='btn btn-success ml-2' value='Quick' onclick='quick_press()'>";
-                    }
-                    else {
-                        echo "<input type='button' class='btn btn-secondary ml-2' value='Quick' onclick='quick_press()'>";                               
-                    }
-                ?>
-                <input type="button" class="btn btn-secondary ml-2" value="Quick">
-                <input type="submit" class="btn btn-primary submit" value="Cheap">
-                <input type="submit" class="btn btn-primary submit" value="Fancy">
-                <input type="submit" class="btn btn-primary submit" value="Vegan">
-                <input type="submit" class="btn btn-primary submit" value="Healthy">
-                <input type="submit" class="btn btn-primary submit" value="Comfort Food">
-                <input type="submit" class="btn btn-primary submit" value="Spicy">
-                <input type="submit" class="btn btn-primary submit" value="Desset">
-                <input type="submit" class="btn btn-primary submit" value="Vegetarian">
+            <div class="form-group">
+                <label>Quick</label>
+                <input type="checkbox" name="quick_tag" value="$quick_tag">
             </div>
+            <div class="form-group">
+                <label>Cheap</label>
+                <input type="checkbox" name="cheap_tag" value="$cheap_tag">
+            </div>
+            <div class="form-group">
+                <label>Fancy</label>
+                <input type="checkbox" name="fancy_tag" value="$fancy_tag">
+            </div>
+            <div class="form-group">
+                <label>Vegan</label>
+                <input type="checkbox" name="vegan_tag" value="$vegan_tag">
+            </div>
+            <div class="form-group">
+                <label>Healthy</label>
+                <input type="checkbox" name="healthy_tag" value="$healthy_tag">
+            </div>
+            <div class="form-group">
+                <label>Comfort Food</label>
+                <input type="checkbox" name="comfort_food_tag" value="$comfort_food_tag">
+            </div>
+            <div class="form-group">
+                <label>Spicy</label>
+                <input type="checkbox" name="spicy_tag" value="$spicy_tag">
+            </div>
+            <div class="form-group">
+                <label>Dessert</label>
+                <input type="checkbox" name="dessert_tag" value="$dessert_tag">
+            </div>
+            <div class="form-group">
+                <label>Vegetarian</label>
+                <input type="checkbox" name="vegetarian_tag" value="$vegetarian_tag">
+            </div>
+            <div class="form-group">
+                <label>Add a picture</label>
+                <input type="file" name="picture" value="$picture">
+            </div>
+            
             <div class="form-group buttons">
                 <input type="reset" class="btn btn-secondary ml-2" value="Reset">
                 <input type="submit" class="btn btn-primary submit" value="Submit">
