@@ -123,8 +123,35 @@
                             <a href="viewrecipe.php?recipe_id=<?= $recipe['recipe_id'] ?>" class="stretched-link"><h3 class="card-title"><?= $recipe['recipe_name'] ?></h3></a>
                         </div>
                         <!-- Recipe image -->
-                        <img src="images/genericrecipe.jpg" class="card-img" alt="Default recipe photo">
-                    </div>
+                        <?php 
+                            $sql = "SELECT * FROM recipe_pictures WHERE recipe_id = $recipeid";
+                            if($stmt = mysqli_prepare($db, $sql)){
+                                // Attempt to execute the prepared statement
+                                if(mysqli_stmt_execute($stmt)){
+                                    // Redirect to login page
+                                    // header("location: landing.php");
+                                    $result = $stmt->get_result();
+                                    $row = $result->fetch_assoc();
+                                    if (mysqli_num_rows($result) > 0) {
+                                        ?>
+                                        <img src="imageView.php?recipe_id=<?php echo $recipeid ?>" class="card-img">
+                                        <?php
+                                    }
+                                    else 
+                                    {
+                                        ?>
+                                        <img src="images/genericrecipe.jpg" class="card-img" alt="Default recipe photo">
+                                        <?php
+                                    }
+                                } else{
+                                    echo "Oops! Something went wrong. Please try again later.";
+                                }
+                    
+                                // Close statement
+                                mysqli_stmt_close($stmt);
+                            }
+                        ?>                    
+                  </div>
                 </div>
 
             <?php } ?>
