@@ -199,7 +199,7 @@
                                         // header("location: landing.php");
                                         $result = $stmt->get_result();
                                         $row = $result->fetch_assoc();
-                                        if (mysqli_num_rows($result) > 0) {
+                                        if (mysqli_num_rows($result) > 0 && $recipeid>20) {
                                             ?>
                                             <img src="imageView.php?recipe_id=<?php echo $recipeid ?>" class="card-img">
                                             <?php
