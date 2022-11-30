@@ -109,7 +109,7 @@
                                 <div class="body col-md-7">
                                     <!-- Favorite icon -->
                                     <div class="favorite">
-                                        <a href="#"><i class="bi-star" style="font-size: 2rem;"></i></a>
+                                        <a href="#"><i class="bi bi-star" style="font-size: 2rem;"></i></a>
                                     </div>
                                     <!-- Recipe information -->
                                     <div class="card-body">

@@ -51,6 +51,10 @@
         max-height: 100%;
         object-fit: cover;
     }
+
+    .bi-star-fill {
+        color: #E4A11B;
+    }
     </style>
 
     <?php 
@@ -83,86 +87,78 @@
         <?php
             // Query the latest 6 recipes by recipe_id
             $latest_recipes = mysqli_query($db, "SELECT * FROM `recipe` ORDER BY recipe_id DESC LIMIT 6");
-            foreach ($latest_recipes as $recipe) { ?>
-
-            <!-- Individual recipe card -->
-            <!-- Click to view recipe's details -->
-            <div class="col-sm-4 cardcol">
-                <div class="card">
-                    <div class="card-body">
-                        <!-- Favorite icon -->
-                        <div class="favorite">
-                            <a href="whoa"><i class="bi-star" style="font-size: 2rem;"></i></a>
+            foreach ($latest_recipes as $recipe) { 
+                // Check recipe's favorite status
+                $favorited = false;
+                $recipeid = $recipe['recipe_id'];
+                $userid = $_SESSION['id'];
+                $thisrecipe_fav = mysqli_query($db, "SELECT * FROM `favorites` WHERE recipe_id=$recipeid AND user_id=$userid");
+                // User has favorited this recipe
+                if (mysqli_num_rows($thisrecipe_fav) != 0) {
+                    $favorited = true;
+                }
+                ?>
+                <!-- Individual recipe card -->
+                <!-- Click to view recipe's details -->
+                <div class="col-sm-4 cardcol">
+                    <div class="card">
+                        <div class="card-body">
+                            <!-- Favorite icon -->
+                            <div class="favorite">
+                                <?php
+                                // Icon depends on favorited status
+                                if ($favorited) {
+                                    echo "<i onclick='unfavorite(this, $userid, $recipeid)' id='fav' class='bi bi-star-fill' style='font-size: 2rem;'></i>";
+                                }
+                                else {
+                                    echo "<i onclick='favorite(this, $userid, $recipeid)' id='fav' class='bi bi-star' style='font-size: 2rem;'></i>";                               
+                                }
+                                ?>
+                            </div>
+                            <!-- Recipe name -->
+                            <a href="viewrecipe.php?recipe_id=<?= $recipe['recipe_id'] ?>" class="stretched-link"><h3 class="card-title"><?= $recipe['recipe_name'] ?></h3></a>
                         </div>
-                        <!-- Recipe name -->
-                        <a href="viewrecipe.php?recipe_id=<?= $recipe['recipe_id'] ?>" class="stretched-link"><h3 class="card-title"><?= $recipe['recipe_name'] ?></h3></a>
+                        <!-- Recipe image -->
+                        <img src="images/genericrecipe.jpg" class="card-img" alt="Default recipe photo">
                     </div>
-                    <!-- Recipe image -->
-                    <img src="images/genericrecipe.jpg" class="card-img" alt="Default recipe photo">
                 </div>
-            </div>
 
             <?php } ?>
-
-        <!-- <div class="col-sm-4 cardcol">
-            <div class="card">
-                <div class="card-body">
-                    <div class="favorite">
-                        <a href="#"><i class="bi-star" style="font-size: 2rem;"></i></a>
-                    </div>
-                    <a href="#" class="stretched-link"><h3 class="card-title">Recipe 2</h3></a>
-                </div>
-                <img src="images/genericrecipe.jpg" class="card-img" alt="Default recipe photo">
-            </div>
-        </div>
-        <div class="col-sm-4 cardcol">
-            <div class="card">
-                <div class="card-body">
-                    <div class="favorite">
-                        <a href="#"><i class="bi-star" style="font-size: 2rem;"></i></a>
-                    </div>
-                    <a href="#" class="stretched-link"><h3 class="card-title">Recipe 3</h3></a>
-                </div>
-                <img src="images/genericrecipe.jpg" class="card-img" alt="Default recipe photo">
-            </div>
-        </div>
-        <div class="col-sm-4 cardcol">
-            <div class="card">
-                <div class="card-body">
-                    <div class="favorite">
-                        <a href="#"><i class="bi-star" style="font-size: 2rem;"></i></a>
-                    </div>
-                    <a href="#" class="stretched-link"><h3 class="card-title">Recipe 4</h3></a>
-                </div>
-                <img src="images/genericrecipe.jpg" class="card-img" alt="Default recipe photo">
-            </div>
-        </div>
-        <div class="col-sm-4 cardcol">
-            <div class="card">
-                <div class="card-body">
-                    <div class="favorite">
-                        <a href="#"><i class="bi-star" style="font-size: 2rem;"></i></a>
-                    </div>
-                    <a href="#" class="stretched-link"><h3 class="card-title">Recipe 5</h3></a>
-                </div>
-                <img src="images/genericrecipe.jpg" class="card-img" alt="Default recipe photo">
-            </div>
-        </div>
-        <div class="col-sm-4 cardcol">
-            <div class="card">
-                <div class="card-body">
-                    <div class="favorite">
-                        <a href="#"><i class="bi-star" style="font-size: 2rem;"></i></a>
-                    </div>
-                    <a href="#" class="stretched-link"><h3 class="card-title">Recipe 6</h3></a>
-                </div>
-                <img src="images/genericrecipe.jpg" class="card-img" alt="Default recipe photo">
-            </div>
-        </div> -->
     </div>
+
+    <!-- Hidden form for updating favorites -->
+    <form id="favform" method="post" style="display:none;">
+        <input type="hidden" id="favuserid" name="favuserid" required>
+        <input type="hidden" id="favrecipeid" name="favrecipeid" required>
+        <input type="hidden" id="favchangeto" name="favchangeto" required>
+    </form>
 
     <?php include('footer.html') ?> 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    
+    <!-- https://www.w3schools.com/php/php_ajax_database.asp -->
+    <script>
+        function favorite(icon, userid, recipeid) {
+            // Toggle star icon
+            icon.classList.toggle("bi-star");
+            icon.classList.toggle("bi-star-fill");
+            // AJAX request to add favorite
+            var xmlhttp = new XMLHttpRequest();
+            xmlhttp.open("GET","getfav.php?userid="+userid+"&recipeid="+recipeid+"&fav=true", true);
+            xmlhttp.send();
+        }
+
+        function unfavorite(icon, userid, recipeid) {
+            // Toggle star icon
+            icon.classList.toggle("bi-star-fill");
+            icon.classList.toggle("bi-star");
+            // AJAX request to remove favorite
+            var xmlhttp = new XMLHttpRequest();
+            xmlhttp.open("GET","getfav.php?userid="+userid+"&recipeid="+recipeid+"&fav=false", true);
+            xmlhttp.send();
+        }
+    </script>
+
 </body>
 </html>
