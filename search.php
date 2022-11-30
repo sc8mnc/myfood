@@ -72,7 +72,46 @@
     <div style="padding-top:208px;">
 
     </div>
+    <style>
+        .searchbox {
+            margin-left:10%;
+    }   
+    </style>
+    <head>
+	<title>Search</title>
+    <div align="left" class="row top">
+        <h2 style="font-weight:bold;"> Search </h2>
+    </div>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<link rel="stylesheet" type="text/css" href="style.css"/>
+    </head>
+    <body>
+    <div class="searchbox">
+	<form action="search.php" method="GET">
+        <label for="tags">Choose a tag:</label>
+        <select name="tags" id="tags">
+        <optgroup label="Recipe Tags">
+            <option value="None">None</option>
+            <option value="Cheap">Cheap</option>
+            <option value="Quick">Quick</option>
+            <option value="Fancy">Fancy</option>
+            <option value="Vegan">Vegan</option>
+            <option value="Healthy">Healthy</option>
+            <option value="Comfort Food">Comfort Food</option>
+            <option value="Spicy">Spicy</option>
+            <option value="Dessert">Dessert</option>
+            <option value="Vegetarian">Vegetarian</option>
+        </optgroup>
+        </select>
+		<input type="text" name="query" />
+		<input type="submit" value="Search" />
+	</form>
+    </div>
+    
+    </body>
 
+    </div>
+    <br>
     <div class="row top">
         <h2 style="font-weight:bold;"> Search Results </h2>
     </div>
