@@ -95,7 +95,7 @@
 
     </style>
 
-    
+<?php include 'protect.php'?>
 <?php
 // Include config file
 require_once "connect-db.php";
@@ -185,6 +185,25 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             // Close statement
             mysqli_stmt_close($stmt);
         }
+       $sql = "INSERT INTO uploads (user_id, recipe_id) VALUES (?, ?)";
+        if($stmt = mysqli_prepare($db, $sql)){
+            // Bind variables to the prepared statement as parameters
+            mysqli_stmt_bind_param($stmt, "ii", $userid, $param_recipe_id);
+            
+            // Set parameters
+            $param_recipe_id = $next_increment;
+            $userid = $_SESSION['id'];
+            
+            // Attempt to execute the prepared statement
+            if(mysqli_stmt_execute($stmt)){
+                // Redirect to login page
+                // header("location: landing.php");
+            } else{
+                echo "Oops! Something went wrong. Please try again later.";
+            }
+            // Close statement
+            mysqli_stmt_close($stmt);
+        }
     }
 
     // ADD TAGS
@@ -262,7 +281,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 <body>
 
     <div class="fixed-top">
-    <?php include 'protect.php'?>
         <?php include('site_heading.html') ?>
         <?php include('navbar.html') ?>
         
