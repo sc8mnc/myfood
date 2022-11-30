@@ -361,12 +361,12 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             </div>    
             <div class="form-group">
                 <label>Ingredients</label>
-                <input type="text" name="ingredients" class="form-control <?php echo (!empty($ingredients_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $ingredients; ?>">
+                <textarea name="ingredients" class="form-control <?php echo (!empty($ingredients_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $ingredients; ?>"></textarea>
                 <span class="invalid-feedback"><?php echo $ingredients_err; ?></span>
             </div>     
             <div class="form-group">
                 <label>Instructions</label>
-                <input type="text" name="instructions" class="form-control <?php echo (!empty($instructions_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $instructions; ?>">
+                <textarea name="instructions" class="form-control <?php echo (!empty($instructions_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $instructions; ?>"></textarea>
                 <span class="invalid-feedback"><?php echo $instructions_err; ?></span>
             </div>    
             <div class="form-group">
