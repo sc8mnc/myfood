@@ -24,7 +24,7 @@
     }
 
     .cardcol {
-        margin-bottom: 2%;
+        margin-bottom: 8%;
     }
 
     .card {
@@ -164,7 +164,7 @@
                         ?>                            
                           </div>
                           <a href="edit_recipe.php?recipe_id=<?= $recipe['recipe_id'] ?>" class="link"><h3 class="card-title"><?= "Edit this recipe" ?></h3></a>
-                            
+
                         </div>
 
                         <?php 
