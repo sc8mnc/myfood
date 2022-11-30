@@ -81,8 +81,7 @@
                 <!-- Recipe image -->
                 <div class="col-md-5 p-0">
                     <!-- https://www.pexels.com/photo/burger-and-vegetables-placed-on-brown-wood-surface-1565982/-->
-                    <img src="images/genericrecipe.jpg" class="cardimg img-fluid rounded-start" alt="Picture of vegetables
-                    and a blank page">
+                    <img src="images/genericrecipe.jpg" class="cardimg img-fluid rounded-start" alt="Default recipe photo">
                 </div>
                 <div class="body col-md-7">
                     <!-- Favorite icon -->
