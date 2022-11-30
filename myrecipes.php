@@ -163,6 +163,8 @@
                             }
                         ?>                            
                           </div>
+                          <a href="edit_recipe.php?recipe_id=<?= $recipe['recipe_id'] ?>" class="link"><h3 class="card-title"><?= "Edit this recipe" ?></h3></a>
+                            
                         </div>
 
                         <?php 
