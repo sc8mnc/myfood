@@ -43,7 +43,7 @@
     }
 
     .card .card-body {
-        background-color: #d1d1d1;
+        background-color: #Dae8da;
     }
 
     .card-img {
@@ -125,13 +125,6 @@
 
             <?php } ?>
     </div>
-
-    <!-- Hidden form for updating favorites -->
-    <form id="favform" method="post" style="display:none;">
-        <input type="hidden" id="favuserid" name="favuserid" required>
-        <input type="hidden" id="favrecipeid" name="favrecipeid" required>
-        <input type="hidden" id="favchangeto" name="favchangeto" required>
-    </form>
 
     <?php include('footer.html') ?> 
 

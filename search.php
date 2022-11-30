@@ -43,7 +43,7 @@
     }
 
     .card .card-body {
-        background-color: #d1d1d1;
+        background-color: #Dae8da;
     }
 
     .card-img {
