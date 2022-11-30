@@ -63,7 +63,7 @@
         </optgroup>
         </select>
 		<input type="text" name="query" />
-		<input type="submit" value="Search" />
+		<input type="submit" class="btn btn-primary submit" value="Search" />
 	</form>
     </div>
     
