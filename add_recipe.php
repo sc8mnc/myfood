@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="author" content="Very Cool Group">
   <meta name="description" content="A MyFood recipe detail page">      
-  <title>MyFood - View Recipe</title>
+  <title>MyFood - Add Recipe</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
   <link rel=”stylesheet” href=”https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css” />
   <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
@@ -141,7 +141,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     } else{
         $cost = trim($_POST["cost"]);
     }
-
     if(isset($_POST["quick_tag"]))
         $quick_tag = $_POST["quick_tag"];
     if(isset($_POST["cheap_tag"]))
@@ -247,26 +246,47 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             }
         }
     }
+    // if (count($_FILES) > 0) {
+    //     echo "done";
+    //     if (is_uploaded_file($_FILES['picture']['tmp_name'])) {
+    //         $imgData = file_get_contents($_FILES['picture']['tmp_name']);
+    //         $imgType = $_FILES['picture']['type'];
+    //         $sql = "INSERT INTO tbl_image(imageType ,imageData) VALUES(?, ?)";
+    //         $statement = $conn->prepare($sql);
+    //         $statement->bind_param('ss', $imgType, $imgData);
+    //         $current_id = $statement->execute() or die("<b>Error:</b> Problem on Image Insert<br/>" . mysqli_connect_error());
+    //     }
+    // }
+    
+    // if(isset($_FILES['picture'])){
+    //     echo $_FILES['picture']['tmp_name'];
+    //     echo "Ssssss";
+    // }
     if (isset($_FILES['picture'])){
         $picture = file_get_contents($_FILES['picture']["tmp_name"]);        
         //$photo_mime = $_FILES['picture']["type"]; 
     }
+    //echo $_FILES['picture'];
+    
     if ($picture != ""){
+        echo "success22";
         // Prepare an insert statement
         $sql = "INSERT INTO recipe_pictures (recipe_id, picture) VALUES (?, ?)";
-         
+        
         if($stmt = mysqli_prepare($db, $sql)){
             // Bind variables to the prepared statement as parameters
-            mysqli_stmt_bind_param($stmt, "ib", $param_recipe_id, $param_picture);
+            mysqli_stmt_bind_param($stmt, "is", $param_recipe_id, $param_picture);
             
             // Set parameters
+            //$picture =addslashes($picture);
             $param_recipe_id = $next_increment;
-            $param_tag = $picture;
-            
+            $param_picture = $picture;
+          
             // Attempt to execute the prepared statement
             if(mysqli_stmt_execute($stmt)){
                 // Redirect to login page
                 // header("location: landing.php");
+                echo "donce";
             } else{
                 echo "Oops! Something went wrong. Please try again later.";
             }
@@ -274,12 +294,36 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             // Close statement
             mysqli_stmt_close($stmt);
         }
+        // $sql = "SELECT picture FROM recipe_pictures WHERE recipe_id = ?";
+        // if($stmt = mysqli_prepare($db, $sql)){
+        //     // Bind variables to the prepared statement as parameters
+        //     mysqli_stmt_bind_param($stmt, "i", $param_recipe_id);
+            
+        //     // Set parameters
+        //     $param_recipe_id = $next_increment;
+          
+        //     // Attempt to execute the prepared statement
+        //     if(mysqli_stmt_execute($stmt)){
+        //         // Redirect to login page
+        //         // header("location: landing.php");
+        //         // $result = $stmt->get_result();
+        //         // $row = $result->fetch_assoc();
+        //         //header("Content-type: image/jpeg");
+        //         //echo $row["picture"];
+        //         //echo "deeeee";
+        //     } else{
+        //         echo "Oops! Something went wrong. Please try again later.";
+            // }
+
+            // Close statement
+            // mysqli_stmt_close($stmt);
+        // }
     }
 
   
     
 
-    header("location: myrecipes.php");
+   header("location: myrecipes.php");
 
 
 
@@ -309,7 +353,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
     <div class="wrapper">
         <h2>Create your own recipe!</h2>
-        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" enctype="multipart/form-data">
             <div class="form-group">
                 <label>Name of recipe</label>
                 <input type="text" name="recipename" class="form-control <?php echo (!empty($recipename_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $recipename; ?>">
@@ -364,18 +408,43 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             </div>
             <div class="form-group">
                 <label>Vegetarian</label>
-                <input type="checkbox" name="vegetarian_tag" value="$vegetarian_tag">
+                <input type="checkbox" name="vegetarian_tag" value="vegetarian_tag">
             </div>
+            <!-- <div class="form-group">
+                <label>Add a picture</label>
+                <input type="file" id="picture" name="picture" accept="image/png, image/jpeg" value="picture">
+            </div> -->
+            
+           
+            
             <div class="form-group">
-            <label>Upload a Picture:</label>
+            <label>Upload Image File:</label>
                 <input name="picture" type="file" class="full-width" accept="image/png, image/jpeg"/>
             </div>
             <div class="form-group buttons">
                 <input type="reset" class="btn btn-secondary ml-2" value="Reset">
                 <input type="submit" class="btn btn-primary submit" value="Submit">
             </div>
-       
-        </form>
+        </div>
+            
+        <!-- </form>
+        <form name="frmImage" enctype="multipart/form-data" action=""
+        method="post">
+        <div class="phppot-container tile-container">
+            <label>Upload Image File:</label>
+            <div class="form-group">
+                <input name="picture" type="file" class="full-width" accept="image/png, image/jpeg"/>
+            </div>
+            <div class="form-group buttons">
+                <input type="reset" class="btn btn-secondary ml-2" value="Reset">
+                <input type="submit" class="btn btn-primary submit" value="Submit">
+            </div>
+        </div>
+        <div class="image-gallery">
+         -->
+        </div>
+    </form>
+        
     </div>    
 
     <?php include('footer.html') ?> 
