@@ -96,7 +96,7 @@
                     $latest_recipes = mysqli_stmt_get_result($stmt);
                     if(mysqli_num_rows($latest_recipes) <= 0)
                     {
-                        echo "No recipes uploaded yet.";
+                        echo "<div style='margin-bottom:23.5%;'>No recipes uploaded yet.</div>";
                     }
                     else
                     {

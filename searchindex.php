@@ -45,7 +45,7 @@
 	<link rel="stylesheet" type="text/css" href="style.css"/>
     </head>
     <body>
-    <div class="searchbox">
+    <div class="searchbox" style="margin-bottom:19%;">
 	<form action="search.php" method="GET">
         <label for="tags">Choose a tag:</label>
         <select name="tags" id="tags">

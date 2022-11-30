@@ -18,6 +18,10 @@
         margin-bottom: 0.5%;
     }
 
+    .title {
+        font-weight: bold;
+    }
+
     .recipes {
         margin-left: 10%;
         margin-right: 10%;
@@ -78,7 +82,7 @@
     </div>
 
     <div class="row top">
-        <h2 style="font-weight:bold;">Latest Recipes</h2>
+        <h2 class="title">Latest Recipes</h2>
     </div>
 
     <!-- Recipe cards -->
