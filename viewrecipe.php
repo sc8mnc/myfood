@@ -191,7 +191,34 @@
                                 <!-- Recipe image -->
                                 <div class="col-md-5 p-0">
                                     <!-- https://www.pexels.com/photo/burger-and-vegetables-placed-on-brown-wood-surface-1565982/-->
-                                    <img src="images/genericrecipe.jpg" class="cardimg img-fluid rounded-start" alt="Default recipe photo">
+                                  <?php 
+                                $sql = "SELECT * FROM recipe_pictures WHERE recipe_id = $recipeid";
+                                if($stmt = mysqli_prepare($db, $sql)){
+                                    // Attempt to execute the prepared statement
+                                    if(mysqli_stmt_execute($stmt)){
+                                        // Redirect to login page
+                                        // header("location: landing.php");
+                                        $result = $stmt->get_result();
+                                        $row = $result->fetch_assoc();
+                                        if (mysqli_num_rows($result) > 0) {
+                                            ?>
+                                            <img src="imageView.php?recipe_id=<?php echo $recipeid ?>" class="card-img">
+                                            <?php
+                                        }
+                                        else 
+                                        {
+                                            ?>
+                                            <img src="images/genericrecipe.jpg" class="card-img" alt="Default recipe photo">
+                                            <?php
+                                        }
+                                    } else{
+                                        echo "Oops! Something went wrong. Please try again later.";
+                                    }
+                        
+                                    // Close statement
+                                    mysqli_stmt_close($stmt);
+                                }
+                            ?> 
                                 </div>
                                 <div class="body col-md-7">
                                     <!-- Favorite icon -->
