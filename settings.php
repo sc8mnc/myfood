@@ -4,8 +4,8 @@
   <meta charset="UTF-8">  
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="author" content="Very Cool Group">
-  <meta name="description" content="A MyFood recipe detail page">      
-  <title>MyFood - View Recipe</title>
+  <meta name="description" content="MyFood User Settings">      
+  <title>MyFood - Settings</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
   <link rel=”stylesheet” href=”https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css” />
   <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
@@ -13,36 +13,63 @@
   <link rel="icon" type="image/png" href="images/siteicon.png" />
 
   <style>
-    .card {
-        height: 100%;
-        width: 65vw;
-    }
+         body {
+            text-align:center;
+         }
+         
+         .form-group {
+            max-width: 330px;
+            padding: 15px;
+            margin: 0 auto;
+            color: #017572;
+         }
+        
+         
+         .form-group .checkbox {
+            font-weight: normal;
+         }
+         
+         .form-group .form-control {
+            position: relative;
+            height: auto;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+            padding: 10px;
+            font-size: 16px;
+         }
+         
+         .form-group .form-control:focus {
+            z-index: 2;
+         }
+         
+         .form-group input[type="email"] {
+            margin-bottom: -1px;
+            border-bottom-right-radius: 0;
+            border-bottom-left-radius: 0;
+            border-color:#017572;
+         }
+         
+         .form-group input[type="password"] {
+            margin-bottom: 10px;
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+            border-color:#017572;
+         }
+         
+         h2{
+            text-align: center;
+            color: #017572;
+            font-weight: bold;
+         }
 
-    .card .body {
-        background-color: #d1d1d1;
-    }
+         .submit {
+            width: 35%;
+         }
 
-    .cardimg {
-        width: 100%;
-        height: 45vh;
-        object-fit: cover;
-    }
-
-    .groupbtn {
-        margin-left: 110px;
-        margin-right: 110px;
-        padding: 12px;
-        width: 12em;
-    }
-
-    .recipename {
-        margin-left: 31%;
-    }
-
-    .favorite {
-        position: absolute;
-        right: 1%;
-    }
+         .alert {
+            width: 55%;
+         }
     </style>
 </head>
 
@@ -151,74 +178,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     mysqli_close($db);
 }
 ?>
- 
-<head>
-    <meta charset="UTF-8">
-    <title>Settings</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <style>
-         body {
-            text-align:center;
-         }
-         
-         .form-group {
-            max-width: 330px;
-            padding: 15px;
-            margin: 0 auto;
-            color: #017572;
-         }
-        
-         
-         .form-group .checkbox {
-            font-weight: normal;
-         }
-         
-         .form-group .form-control {
-            position: relative;
-            height: auto;
-            -webkit-box-sizing: border-box;
-            -moz-box-sizing: border-box;
-            box-sizing: border-box;
-            padding: 10px;
-            font-size: 16px;
-         }
-         
-         .form-group .form-control:focus {
-            z-index: 2;
-         }
-         
-         .form-group input[type="email"] {
-            margin-bottom: -1px;
-            border-bottom-right-radius: 0;
-            border-bottom-left-radius: 0;
-            border-color:#017572;
-         }
-         
-         .form-group input[type="password"] {
-            margin-bottom: 10px;
-            border-top-left-radius: 0;
-            border-top-right-radius: 0;
-            border-color:#017572;
-         }
-         
-         h2{
-            text-align: center;
-            color: #017572;
-            font-weight: bold;
-         }
 
-         .submit {
-            margin-top: 12px;
-            margin-bottom: 8px;
-            width: 35%;
-         }
-
-         .alert {
-            width: 55%;
-         }
-    </style>
-</head>
-<body>
     <div class="wrapper">
         <h2>Settings</h2>
         <p>Please fill out this form to reset your information.</p>
@@ -244,8 +204,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 <span class="invalid-feedback"><?php echo $confirm_password_err; ?></span>
             </div>
             <div class="form-group">
-                <input type="submit" class="btn btn-primary" value="Submit">
                 <a class="btn btn-link ml-2" href="landing.php">Cancel</a>
+                <input type="submit" class="submit btn btn-primary" value="Submit">
             </div>
         </form>
     </div>    
