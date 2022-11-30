@@ -142,15 +142,24 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         $cost = trim($_POST["cost"]);
     }
 
-    $quick_tag = $_POST["quick_tag"];
-    $cheap_tag = $_POST["cheap_tag"];
-    $fancy_tag = $_POST["fancy_tag"];
-    $vegan_tag = $_POST["vegan_tag"];
-    $healthy_tag = $_POST["healthy_tag"];
-    $comfort_food_tag = $_POST["comfort_food_tag"];
-    $spicy_tag = $_POST["spicy_tag"];
-    $dessert_tag = $_POST["dessert_tag"];
-    $vegetarian_tag = $_POST["vegetarian_tag"];
+    if(isset($_POST["quick_tag"]))
+        $quick_tag = $_POST["quick_tag"];
+    if(isset($_POST["cheap_tag"]))
+        $cheap_tag = $_POST["cheap_tag"];
+    if(isset($_POST["fancy_tag"]))
+        $fancy_tag = $_POST["fancy_tag"];
+    if(isset($_POST["vegan_tag"]))
+        $vegan_tag = $_POST["vegan_tag"];
+    if(isset($_POST["healthy_tag"]))
+        $healthy_tag = $_POST["healthy_tag"];
+    if(isset($_POST["comfort_food_tag"]))
+        $comfort_food_tag = $_POST["comfort_food_tag"];
+    if(isset($_POST["spicy_tag"]))
+        $spicy_tag = $_POST["spicy_tag"];
+    if(isset($_POST["dessert_tag"]))
+        $dessert_tag = $_POST["dessert_tag"];
+    if(isset($_POST["vegetarian_tag"]))
+        $vegetarian_tag = $_POST["vegetarian_tag"];
 
     // $next_recipe = mysqli_query($db, "SELECT * FROM `recipe` ORDER BY recipe_id DESC LIMIT 1");
     // foreach ($next_recipe as $next_recipe_indiv){
@@ -238,7 +247,10 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             }
         }
     }
-
+    if (isset($_FILES['picture'])){
+        $picture = file_get_contents($_FILES['picture']["tmp_name"]);        
+        //$photo_mime = $_FILES['picture']["type"]; 
+    }
     if ($picture != ""){
         // Prepare an insert statement
         $sql = "INSERT INTO recipe_pictures (recipe_id, picture) VALUES (?, ?)";
@@ -355,16 +367,14 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 <input type="checkbox" name="vegetarian_tag" value="$vegetarian_tag">
             </div>
             <div class="form-group">
-                <label>Add a picture</label>
-                <input type="file" name="picture" value="$picture">
+            <label>Upload a Picture:</label>
+                <input name="picture" type="file" class="full-width" accept="image/png, image/jpeg"/>
             </div>
-            
             <div class="form-group buttons">
                 <input type="reset" class="btn btn-secondary ml-2" value="Reset">
                 <input type="submit" class="btn btn-primary submit" value="Submit">
             </div>
-
-            
+       
         </form>
     </div>    
 
