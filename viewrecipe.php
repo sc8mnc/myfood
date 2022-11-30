@@ -25,7 +25,7 @@
     .cardimg {
         width: 100%;
         height: 100%;
-        object-fit: fill;
+        object-fit: cover;
     }
 
     .groupbtn {
@@ -58,11 +58,17 @@
         font-size: 14px;
     }
     </style>
+
+    <?php 
+        // Include config file
+        require_once "connect-db.php";
+    ?>
 </head>
 
 <body>
 
     <div class="fixed-top">
+        <?php include 'protect.php'?>
         <?php include('site_heading.html') ?>
         <?php include('navbar.html') ?>
     </div>
@@ -73,54 +79,89 @@
 
     <!-- Recipe details -->
     <div class="row d-flex justify-content-center align-items-center">
-        <div class="row recipename">
-            <h2 style="font-weight:bold;">Recipe Name</h2>
-        </div>
-        <div class="card mb-3 p-0">
-            <div class="row">
-                <!-- Recipe image -->
-                <div class="col-md-5 p-0">
-                    <!-- https://www.pexels.com/photo/burger-and-vegetables-placed-on-brown-wood-surface-1565982/-->
-                    <img src="images/genericrecipe.jpg" class="cardimg img-fluid rounded-start" alt="Default recipe photo">
-                </div>
-                <div class="body col-md-7">
-                    <!-- Favorite icon -->
-                    <div class="favorite">
-                    <a href="#"><i class="bi-star" style="font-size: 2rem;"></i></a>
-                    </div>
-                    <!-- Recipe information -->
-                    <div class="card-body">
-                        <p class="card-text userblock">
-                            Uploaded by: Blah
-                        </p>
-                        <p class="card-text infoblock">
-                            Ingredients: <br>
-                            <span class="card-text infotext">
-                                Blah
-                            </span>
-                        </p>
-                        <p class="card-text infoblock">
-                            Instructions: <br>
-                            <span class="card-text infotext"> 
-                                Blah
-                            </span>
-                        </p>
-                        <p class="card-text infoblock">
-                            Tags: <br>
-                            <span class="card-text infotext"> 
-                                Blah 
-                            </span>
-                        </p>
-                        <p class="card-text infoblock">
-                            Estimated Cost: <br>
-                            <span class="card-text infotext"> 
-                                Blah 
-                            </span>
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <?php 
+            if(isset($_GET["recipe_id"])) {
+                $id = $_GET["recipe_id"];
+                // Check if recipe id exists
+                $rid_rows = mysqli_query($db, "SELECT * FROM recipe where recipe_id=$id");
+                if (mysqli_num_rows($rid_rows) != 0) {    
+                    // Get username of recipe uploader
+                    $upload_rows = mysqli_query($db, "SELECT username FROM user where user_id=
+                                                        (SELECT user_id FROM uploads where recipe_id=$id);");
+                    $upload_username = mysqli_fetch_row($upload_rows)[0];
+                    // Get any tags associated with the recipe
+                    $tag_rows = mysqli_query($db, "SELECT tag FROM recipe_tags WHERE recipe_id=$id");
+                    $recipe_tags = mysqli_fetch_all($tag_rows);
+                    // Get recipe details by recipe id
+                    $recipe_info = mysqli_query($db, "SELECT * FROM recipe WHERE recipe_id=$id");
+                    foreach($recipe_info as $recipe) { ?>
+                        <!-- Recipe name -->
+                        <div class="row recipename">
+                            <h2 style="font-weight:bold;"><?= $recipe['recipe_name'] ?></h2>
+                        </div>
+                        <div class="card mb-3 p-0">
+                            <div class="row">
+                                <!-- Recipe image -->
+                                <div class="col-md-5 p-0">
+                                    <!-- https://www.pexels.com/photo/burger-and-vegetables-placed-on-brown-wood-surface-1565982/-->
+                                    <img src="images/genericrecipe.jpg" class="cardimg img-fluid rounded-start" alt="Default recipe photo">
+                                </div>
+                                <div class="body col-md-7">
+                                    <!-- Favorite icon -->
+                                    <div class="favorite">
+                                        <a href="#"><i class="bi-star" style="font-size: 2rem;"></i></a>
+                                    </div>
+                                    <!-- Recipe information -->
+                                    <div class="card-body">
+                                    <p class="card-text userblock">
+                                        Uploaded by: <?= $upload_username ?>
+                                    </p>
+                                    <p class="card-text infoblock">
+                                        Ingredients: <br>
+                                        <span class="card-text infotext">
+                                            <?= $recipe['ingredients'] ?>
+                                        </span>
+                                    </p>
+                                    <p class="card-text infoblock">
+                                        Instructions: <br>
+                                        <span class="card-text infotext"> 
+                                            <?= $recipe['instructions'] ?>
+                                        </span>
+                                    </p>
+                                    <p class="card-text infoblock">
+                                        Tags: <br>
+                                        <span class="card-text infotext"> 
+                                            <?php
+                                                if (empty($recipe_tags)) {
+                                                    echo "No tags found";
+                                                }
+                                                else {
+                                                    foreach($recipe_tags as $tag) {
+                                                        echo $tag[0]." ";
+                                                    }
+                                                }
+                                            ?>
+                                        </span>
+                                    </p>
+                                    <p class="card-text infoblock">
+                                        Estimated Cost: <br>
+                                        <span class="card-text infotext"> 
+                                            $<?= $recipe['cost'] ?>
+                                        </span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                    <?php
+                    }
+                }
+                // Recipe id doesn't exist
+                else {
+                    echo "<div class='text-center' style='margin-top:2%; margin-bottom:20%'>Recipe does not exist.</div>";
+                }
+            }
+        ?>
     </div>
 
     <?php include('footer.html') ?> 

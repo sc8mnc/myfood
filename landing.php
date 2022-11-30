@@ -32,6 +32,10 @@
         width: 25vw;
     }
 
+    .card-title {
+        max-width: 90%;
+    }
+
     .favorite {
         position: absolute;
         right: 4%;
@@ -48,6 +52,12 @@
         object-fit: cover;
     }
     </style>
+
+    <?php 
+        // Include config file
+        require_once "connect-db.php";
+    ?>
+
 </head>
 
 <body>
@@ -67,22 +77,34 @@
         <h2 style="font-weight:bold;">Latest Recipes</h2>
     </div>
 
+    <!-- Recipe cards -->
     <div class="row recipes">
 
-        <div class="col-sm-4 cardcol">
-            <div class="card">
-                <div class="card-body">
-                    <!-- Favorite icon -->
-                    <div class="favorite">
-                        <a href="whoa"><i class="bi-star" style="font-size: 2rem;"></i></a>
-                    </div>
-                    <a href="#" class="stretched-link"><h3 class="card-title">Recipe 1</h3></a>
-                </div>
-                <img src="images/genericrecipe.jpg" class="card-img" alt="Default recipe photo">
-            </div>
-        </div>
+        <?php
+            // Query the latest 6 recipes by recipe_id
+            $latest_recipes = mysqli_query($db, "SELECT * FROM `recipe` ORDER BY recipe_id DESC LIMIT 6");
+            foreach ($latest_recipes as $recipe) { ?>
 
-        <div class="col-sm-4 cardcol">
+            <!-- Individual recipe card -->
+            <!-- Click to view recipe's details -->
+            <div class="col-sm-4 cardcol">
+                <div class="card">
+                    <div class="card-body">
+                        <!-- Favorite icon -->
+                        <div class="favorite">
+                            <a href="whoa"><i class="bi-star" style="font-size: 2rem;"></i></a>
+                        </div>
+                        <!-- Recipe name -->
+                        <a href="viewrecipe.php?recipe_id=<?= $recipe['recipe_id'] ?>" class="stretched-link"><h3 class="card-title"><?= $recipe['recipe_name'] ?></h3></a>
+                    </div>
+                    <!-- Recipe image -->
+                    <img src="images/genericrecipe.jpg" class="card-img" alt="Default recipe photo">
+                </div>
+            </div>
+
+            <?php } ?>
+
+        <!-- <div class="col-sm-4 cardcol">
             <div class="card">
                 <div class="card-body">
                     <div class="favorite">
@@ -136,7 +158,7 @@
                 </div>
                 <img src="images/genericrecipe.jpg" class="card-img" alt="Default recipe photo">
             </div>
-        </div>
+        </div> -->
     </div>
 
     <?php include('footer.html') ?> 
