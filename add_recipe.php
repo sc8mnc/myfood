@@ -139,11 +139,19 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     } else{
         $cost = trim($_POST["cost"]);
     }
+
+    // $next_recipe = mysqli_query($db, "SELECT * FROM `recipe` ORDER BY recipe_id DESC LIMIT 1");
+    // foreach ($next_recipe as $next_recipe_indiv){
+    //     $next_recipe_id = $next_recipe_indiv['recipe_id'] + 1;
+    // }
+    $result = mysqli_query($db, "SHOW TABLE STATUS LIKE 'recipe'");
+    $data = mysqli_fetch_assoc($result);
+    $next_increment = $data['Auto_increment'];
     
     // Check input errors before inserting in database
-    if(empty($recipename_err) && empty($recipename_err) && empty($instructions_err) && empty($cost_err)){
+    if(empty($recipename_err) && empty($ingredients_err) && empty($instructions_err) && empty($cost_err)){
         // Prepare an insert statement
-        $sql = "INSERT INTO recipe (recipename, ingredients, cost, instructions) VALUES (?, ?, ?, ?)";
+        $sql = "INSERT INTO recipe (recipe_name, ingredients, cost, instructions) VALUES (?, ?, ?, ?)";
          
         if($stmt = mysqli_prepare($db, $sql)){
             // Bind variables to the prepared statement as parameters
@@ -158,7 +166,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             // Attempt to execute the prepared statement
             if(mysqli_stmt_execute($stmt)){
                 // Redirect to login page
-                header("location: landing.php");
+                // header("location: landing.php");
             } else{
                 echo "Oops! Something went wrong. Please try again later.";
             }
@@ -169,6 +177,39 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     }
 
     // ADD TAGS
+
+    $tag_array = array("Quick" => $quick_tag, "Cheap" => $cheap_tag, "Fancy" => $fancy_tag,
+    "Vegan" => $vegan_tag, "Healthy" => $healthy_tag, "Comfort Food" => $comfort_food_tag,
+    "Spicy" => $spicy_tag, "Dessert" => $dessert_tag, "Vegetarian" => $vegetarian_tag,);
+
+    foreach($tag_array as $key_tag => $tag_bool){
+        if ($tag_bool == true){
+            // Prepare an insert statement
+            $sql = "INSERT INTO recipe_tags (recipe_id, tag) VALUES (?, ?)";
+             
+            if($stmt = mysqli_prepare($db, $sql)){
+                // Bind variables to the prepared statement as parameters
+                mysqli_stmt_bind_param($stmt, "is", $param_recipe_id, $param_tag);
+                
+                // Set parameters
+                $param_recipe_id = $next_increment;
+                $param_tag = $key_tag;
+                
+                // Attempt to execute the prepared statement
+                if(mysqli_stmt_execute($stmt)){
+                    // Redirect to login page
+                    // header("location: landing.php");
+                } else{
+                    echo "Oops! Something went wrong. Please try again later.";
+                }
+    
+                // Close statement
+                mysqli_stmt_close($stmt);
+            }
+        }
+    }
+
+    header("location: landing.php");
 
 
 
@@ -195,6 +236,24 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
     </div>
 
+    <script>
+        function quick_press() {
+            $quick_tag = !$quick_tag
+            echo "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+
+        }
+
+        function unfavorite(icon, userid, recipeid) {
+            // Toggle star icon
+            icon.classList.toggle("bi-star-fill");
+            icon.classList.toggle("bi-star");
+            // AJAX request to remove favorite
+            var xmlhttp = new XMLHttpRequest();
+            xmlhttp.open("GET","getfav.php?userid="+userid+"&recipeid="+recipeid+"&fav=false", true);
+            xmlhttp.send();
+        }
+    </script>
+
     <div class="wrapper">
         <h2>Create your own recipe!</h2>
         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
@@ -219,14 +278,39 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 <span class="invalid-feedback"><?php echo $cost_err; ?></span>
             </div>
             <div class="form-group buttons">
+                <!-- Favorite icon -->
+                <?php
+                    // Icon depends on favorited status
+                    if ($quick_tag) {
+                        echo "<input type='button' class='btn btn-success ml-2' value='Quick' onclick='quick_press()'>";
+                    }
+                    else {
+                        echo "<input type='button' class='btn btn-secondary ml-2' value='Quick' onclick='quick_press()'>";                               
+                    }
+                ?>
+                <input type="button" class="btn btn-secondary ml-2" value="Quick">
+                <input type="submit" class="btn btn-primary submit" value="Cheap">
+                <input type="submit" class="btn btn-primary submit" value="Fancy">
+                <input type="submit" class="btn btn-primary submit" value="Vegan">
+                <input type="submit" class="btn btn-primary submit" value="Healthy">
+                <input type="submit" class="btn btn-primary submit" value="Comfort Food">
+                <input type="submit" class="btn btn-primary submit" value="Spicy">
+                <input type="submit" class="btn btn-primary submit" value="Desset">
+                <input type="submit" class="btn btn-primary submit" value="Vegetarian">
+            </div>
+            <div class="form-group buttons">
                 <input type="reset" class="btn btn-secondary ml-2" value="Reset">
                 <input type="submit" class="btn btn-primary submit" value="Submit">
             </div>
+
+            
         </form>
     </div>    
 
     <?php include('footer.html') ?> 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+
+    
 </body>
 </html>
